@@ -145,7 +145,7 @@ class Client extends EventEmitter
         @_pongTimeout = null
 
       # We don't set any flags or anything here, since the event handling on the socket will do it
-      @ws.close()
+      @ws?.close()
       return true
 
   reconnect: ->
@@ -180,14 +180,12 @@ class Client extends EventEmitter
   _onJoinChannel: (data) =>
     @logger.debug data
 
-  openDM: (user_id, callback) ->
+  openDM: (user_id, callback=@_onOpenDM) ->
     params = {
       "user": user_id
     }
 
-    @_apiCall 'im.open', params, =>
-      @_onOpenDM arguments...
-      callback? arguments...
+    @_apiCall 'im.open', params, callback
 
   _onOpenDM: (data) =>
     @logger.debug data
@@ -270,7 +268,7 @@ class Client extends EventEmitter
     @dms[id]
 
   getDMByName: (name) ->
-    for k of @dms
+    for k, v of @dms
       if @dms[k].name == name
         return @dms[k]
 

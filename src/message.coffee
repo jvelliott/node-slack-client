@@ -1,6 +1,6 @@
 class Message
   constructor: (@_client, data = {}) ->
-    for k of (data or {})
+    for k, v of (data or {})
       @[k] = data[k]
 
   toJSON: ->
